@@ -40,9 +40,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/profileImgUpdate', [UserController::class, 'profileImgUpdate']);
 
 
+    Route::post('/admin/register', [AdminController::class, 'register']);
     Route::get('/admin/getAllUsers', [AdminController::class, 'getAllUsers']);
     Route::post('/admin/makeAdmin', [AdminController::class, 'makeAdmin']);
     Route::post('/admin/removeAdmin', [AdminController::class, 'removeAdmin']);
     Route::post('/admin/deleteUser', [AdminController::class, 'deleteUser']);
     Route::post('/admin/deleteselectedUser', [AdminController::class, 'deleteselectedUser']);
+    Route::get('/admin/last_seen', [AdminController::class, 'last_seen']);
+    Route::post('/admin/filterDates', [AdminController::class, 'filterDates']);
+    Route::post('/admin/sortDates', [AdminController::class, 'sortDates']);
+    Route::post('/admin/makeActive', [AdminController::class, 'makeActive']);
+    Route::post('/admin/removeActive', [AdminController::class, 'removeActive']);
 });

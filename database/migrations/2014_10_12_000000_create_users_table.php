@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('IsActive');
             $table->rememberToken();
+            $table->timestamp('last_seen')->nullable();
             $table->timestamps();
         });
     }
