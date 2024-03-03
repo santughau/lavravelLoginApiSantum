@@ -113,6 +113,7 @@ class UserController extends Controller
             'message' => 'Logged user Data',
             'success' => true,
             'status' => 200,
+            'img'=> asset('users/'.auth()->user()->photo)
         ];
         return response()->json($response, 401);
     }
@@ -150,9 +151,9 @@ class UserController extends Controller
             'name' => 'required',
             'gender' => 'required',
             'mobile' => 'required',
-            'dob' => 'required',
+            'dob' => 'required',           
         ]);
-        
+
         if ($validator->fails()) {
             $response = [
                 'success' => false,
@@ -162,22 +163,54 @@ class UserController extends Controller
             return response()->json($response, 404);
         }
 
-        if ($request->photo == '') {
-
-            if ($request->gender == 'male') {
-                $request->photo = 'male.jpg';
-            } else {
-                $request->photo = 'female.jpg';
-            }
-        }
-        
-        
         $data = User::find($request->id)->update([
-            'name'=>$request->name,            
-            'photo'=> $request->photo,            
+            'name'=>$request->name,             
             'gender'=> $request->gender,            
             'mobile'=> $request->mobile,            
             'dob'=> $request->dob            
+        ]);
+                
+        if (is_null($data)) {
+            $response = [
+                'success' => false,
+                'message' => 'Data not found.',
+                'status' => 404
+            ];
+            return response()->json($response, 404);
+        }
+
+        $response = [
+            'data' => $data,
+            'success' => true,
+            'status' => 200,
+        ];
+        return response()->json($response, 200);
+    }
+
+
+    public function profileImgUpdate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|mimes:png,jpg,jpeg,gif',            
+            'id' => 'required',            
+        ]);
+        
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'message' => 'Validation Error.', $validator->errors(),
+                'status' => 500
+            ];
+            return response()->json($response, 404);
+        }   
+        
+        $img = $request->photo;
+        $ext = $img->getClientOriginalExtension();
+        $userEmail = auth()->user()->email;
+        $imgName = $userEmail.'.'.$ext;
+        $img->move(public_path().'/users/',$imgName);
+      
+        $data = User::find($request->id)->update([
+            'photo'=> $imgName        
         ]);
 
 
@@ -195,5 +228,6 @@ class UserController extends Controller
             'status' => 200,
         ];
         return response()->json($response, 200);
+    
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\user\UserController;
+use App\Http\Controllers\admin\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\user\PasswordResetController;
@@ -36,4 +37,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/loggedUser', [UserController::class, 'loggedUser']);
     Route::post('/user/changepassword', [UserController::class, 'changepassword']);
     Route::post('/user/updaterofile', [UserController::class, 'profileUpdate']);
+    Route::post('/user/profileImgUpdate', [UserController::class, 'profileImgUpdate']);
+
+
+    Route::get('/admin/getAllUsers', [AdminController::class, 'getAllUsers']);
+    Route::post('/admin/makeAdmin', [AdminController::class, 'makeAdmin']);
+    Route::post('/admin/removeAdmin', [AdminController::class, 'removeAdmin']);
+    Route::post('/admin/deleteUser', [AdminController::class, 'deleteUser']);
+    Route::post('/admin/deleteselectedUser', [AdminController::class, 'deleteselectedUser']);
 });
